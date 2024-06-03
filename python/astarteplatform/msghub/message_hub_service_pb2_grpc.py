@@ -4,6 +4,7 @@ import grpc
 
 from astarteplatform.msghub import astarte_message_pb2 as astarteplatform_dot_msghub_dot_astarte__message__pb2
 from astarteplatform.msghub import interface_pb2 as astarteplatform_dot_msghub_dot_interface__pb2
+from astarteplatform.msghub import message_hub_service_pb2 as astarteplatform_dot_msghub_dot_message__hub__service__pb2
 from astarteplatform.msghub import node_pb2 as astarteplatform_dot_msghub_dot_node__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
@@ -20,27 +21,27 @@ class MessageHubStub(object):
         self.Attach = channel.unary_stream(
                 '/astarteplatform.msghub.MessageHub/Attach',
                 request_serializer=astarteplatform_dot_msghub_dot_node__pb2.Node.SerializeToString,
-                response_deserializer=astarteplatform_dot_msghub_dot_astarte__message__pb2.AstarteMessage.FromString,
+                response_deserializer=astarteplatform_dot_msghub_dot_astarte__message__pb2.AstarteMessageResult.FromString,
                 )
         self.Send = channel.unary_unary(
                 '/astarteplatform.msghub.MessageHub/Send',
                 request_serializer=astarteplatform_dot_msghub_dot_astarte__message__pb2.AstarteMessage.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                response_deserializer=astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.FromString,
                 )
         self.Detach = channel.unary_unary(
                 '/astarteplatform.msghub.MessageHub/Detach',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                response_deserializer=astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.FromString,
                 )
         self.AddInterfaces = channel.unary_unary(
                 '/astarteplatform.msghub.MessageHub/AddInterfaces',
                 request_serializer=astarteplatform_dot_msghub_dot_interface__pb2.InterfacesJson.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                response_deserializer=astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.FromString,
                 )
         self.RemoveInterfaces = channel.unary_unary(
                 '/astarteplatform.msghub.MessageHub/RemoveInterfaces',
                 request_serializer=astarteplatform_dot_msghub_dot_interface__pb2.InterfacesName.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                response_deserializer=astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.FromString,
                 )
 
 
@@ -89,27 +90,27 @@ def add_MessageHubServicer_to_server(servicer, server):
             'Attach': grpc.unary_stream_rpc_method_handler(
                     servicer.Attach,
                     request_deserializer=astarteplatform_dot_msghub_dot_node__pb2.Node.FromString,
-                    response_serializer=astarteplatform_dot_msghub_dot_astarte__message__pb2.AstarteMessage.SerializeToString,
+                    response_serializer=astarteplatform_dot_msghub_dot_astarte__message__pb2.AstarteMessageResult.SerializeToString,
             ),
             'Send': grpc.unary_unary_rpc_method_handler(
                     servicer.Send,
                     request_deserializer=astarteplatform_dot_msghub_dot_astarte__message__pb2.AstarteMessage.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                    response_serializer=astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.SerializeToString,
             ),
             'Detach': grpc.unary_unary_rpc_method_handler(
                     servicer.Detach,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                    response_serializer=astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.SerializeToString,
             ),
             'AddInterfaces': grpc.unary_unary_rpc_method_handler(
                     servicer.AddInterfaces,
                     request_deserializer=astarteplatform_dot_msghub_dot_interface__pb2.InterfacesJson.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                    response_serializer=astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.SerializeToString,
             ),
             'RemoveInterfaces': grpc.unary_unary_rpc_method_handler(
                     servicer.RemoveInterfaces,
                     request_deserializer=astarteplatform_dot_msghub_dot_interface__pb2.InterfacesName.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                    response_serializer=astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -134,7 +135,7 @@ class MessageHub(object):
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/astarteplatform.msghub.MessageHub/Attach',
             astarteplatform_dot_msghub_dot_node__pb2.Node.SerializeToString,
-            astarteplatform_dot_msghub_dot_astarte__message__pb2.AstarteMessage.FromString,
+            astarteplatform_dot_msghub_dot_astarte__message__pb2.AstarteMessageResult.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -151,7 +152,7 @@ class MessageHub(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/astarteplatform.msghub.MessageHub/Send',
             astarteplatform_dot_msghub_dot_astarte__message__pb2.AstarteMessage.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -168,7 +169,7 @@ class MessageHub(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/astarteplatform.msghub.MessageHub/Detach',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -185,7 +186,7 @@ class MessageHub(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/astarteplatform.msghub.MessageHub/AddInterfaces',
             astarteplatform_dot_msghub_dot_interface__pb2.InterfacesJson.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -202,6 +203,6 @@ class MessageHub(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/astarteplatform.msghub.MessageHub/RemoveInterfaces',
             astarteplatform_dot_msghub_dot_interface__pb2.InterfacesName.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            astarteplatform_dot_msghub_dot_message__hub__service__pb2.MessageHubResult.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
