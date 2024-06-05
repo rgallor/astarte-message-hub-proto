@@ -264,6 +264,14 @@ impl InterfacesName {
     }
 }
 
+impl From<AstarteMessage> for AstarteMessageResult {
+    fn from(value: AstarteMessage) -> Self {
+        Self {
+            result: Some(astarte_message_result::Result::Message(value)),
+        }
+    }
+}
+
 #[cfg(test)]
 mod test {
     use std::collections::HashMap;
