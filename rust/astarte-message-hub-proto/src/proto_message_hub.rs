@@ -24,6 +24,7 @@
 //! folder.
 
 use self::{astarte_data_type::Data, astarte_message::Payload};
+use pbjson_types::Empty;
 use serde::Serialize;
 use uuid::Uuid;
 
@@ -268,6 +269,14 @@ impl From<AstarteMessage> for AstarteMessageResult {
     fn from(value: AstarteMessage) -> Self {
         Self {
             result: Some(astarte_message_result::Result::Message(value)),
+        }
+    }
+}
+
+impl MessageHubResult {
+    pub fn empty() -> Self {
+        Self {
+            result: Some(message_hub_result::Result::EmptyMessage(Empty {})),
         }
     }
 }
