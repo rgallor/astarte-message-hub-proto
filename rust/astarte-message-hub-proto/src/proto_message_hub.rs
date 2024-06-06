@@ -273,6 +273,15 @@ impl From<AstarteMessage> for AstarteMessageResult {
     }
 }
 
+impl AstarteMessageResult {
+    pub fn take_message(self) -> Option<AstarteMessage> {
+        self.result.and_then(|r| match r {
+            astarte_message_result::Result::Message(msg) => Some(msg),
+            astarte_message_result::Result::Error(_) => None
+        })
+    }
+}
+
 impl MessageHubResult {
     pub fn empty() -> Self {
         Self {
