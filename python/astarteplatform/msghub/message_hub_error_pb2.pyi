@@ -9,14 +9,12 @@ class MessageHubError(_message.Message):
     __slots__ = ("code", "description")
     class ErrorCode(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
         __slots__ = ()
-        UNKNOWN: _ClassVar[MessageHubError.ErrorCode]
-        ASTARTE_INVALID_DATA: _ClassVar[MessageHubError.ErrorCode]
+        UNAUTHORIZED: _ClassVar[MessageHubError.ErrorCode]
+        INVALID_DATA: _ClassVar[MessageHubError.ErrorCode]
         ASTARTE_SDK_ERROR: _ClassVar[MessageHubError.ErrorCode]
-        CONVERSION_ERROR: _ClassVar[MessageHubError.ErrorCode]
-    UNKNOWN: MessageHubError.ErrorCode
-    ASTARTE_INVALID_DATA: MessageHubError.ErrorCode
+    UNAUTHORIZED: MessageHubError.ErrorCode
+    INVALID_DATA: MessageHubError.ErrorCode
     ASTARTE_SDK_ERROR: MessageHubError.ErrorCode
-    CONVERSION_ERROR: MessageHubError.ErrorCode
     CODE_FIELD_NUMBER: _ClassVar[int]
     DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
     code: MessageHubError.ErrorCode

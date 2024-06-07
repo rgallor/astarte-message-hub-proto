@@ -162,14 +162,12 @@ pub mod message_hub_error {
     )]
     #[repr(i32)]
     pub enum ErrorCode {
-        /// Unknown error.
-        Unknown = 0,
+        /// Node unauthorized to attach to the Message Hub server.
+        Unauthorized = 0,
         /// Error occurred when trying to send an invalid data.
-        AstarteInvalidData = 1,
+        InvalidData = 1,
         /// Error returned by the Astarte SDK.
         AstarteSdkError = 2,
-        /// Error occurred during conversion between types.
-        ConversionError = 3,
     }
     impl ErrorCode {
         /// String value of the enum field names used in the ProtoBuf definition.
@@ -178,19 +176,17 @@ pub mod message_hub_error {
         /// (if the ProtoBuf definition does not change) and safe for programmatic use.
         pub fn as_str_name(&self) -> &'static str {
             match self {
-                ErrorCode::Unknown => "UNKNOWN",
-                ErrorCode::AstarteInvalidData => "ASTARTE_INVALID_DATA",
+                ErrorCode::Unauthorized => "UNAUTHORIZED",
+                ErrorCode::InvalidData => "INVALID_DATA",
                 ErrorCode::AstarteSdkError => "ASTARTE_SDK_ERROR",
-                ErrorCode::ConversionError => "CONVERSION_ERROR",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
         pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
             match value {
-                "UNKNOWN" => Some(Self::Unknown),
-                "ASTARTE_INVALID_DATA" => Some(Self::AstarteInvalidData),
+                "UNAUTHORIZED" => Some(Self::Unauthorized),
+                "INVALID_DATA" => Some(Self::InvalidData),
                 "ASTARTE_SDK_ERROR" => Some(Self::AstarteSdkError),
-                "CONVERSION_ERROR" => Some(Self::ConversionError),
                 _ => None,
             }
         }

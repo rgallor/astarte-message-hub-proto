@@ -26,10 +26,9 @@ package astarteplatform.msghub;
 message MessageHubError{
   // A list specifying general categories of Astarte Message Hub error.
   enum ErrorCode{
-    UNKNOWN = 0;              // Unknown error.
-    ASTARTE_INVALID_DATA = 1; // Error occurred when trying to send an invalid data.
+    UNAUTHORIZED = 0;         // Node unauthorized to attach to the Message Hub server.
+    INVALID_DATA = 1;         // Error occurred when trying to send an invalid data.
     ASTARTE_SDK_ERROR = 2;    // Error returned by the Astarte SDK.
-    CONVERSION_ERROR = 3;     // Error occurred during conversion between types.
   }
 
   ErrorCode code = 1;     // Error enum value.
