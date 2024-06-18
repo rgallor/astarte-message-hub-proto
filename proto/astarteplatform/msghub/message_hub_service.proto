@@ -33,24 +33,13 @@ service MessageHub {
   /* This function should be used to attach a node to an instance of the Astarte message hub.
    * Returns a data stream from the Astarte message hub.
    */
-  rpc Attach(Node) returns (stream AstarteMessageResult) {}
+  rpc Attach(Node) returns (stream MessageHubEvent) {}
   /* This function should be used to send an `AstarteMessage` to Astarte. */
-  rpc Send(AstarteMessage) returns (MessageHubResult){}
+  rpc Send(AstarteMessage) returns (google.protobuf.Empty){}
   /* This function should be used to detach a node from an instance of the Astarte message hub. */
-  rpc Detach(google.protobuf.Empty) returns (MessageHubResult){}
+  rpc Detach(google.protobuf.Empty) returns (google.protobuf.Empty){}
   /* This function should be used to add one or more interfaces to an instance of the Astarte message hub. */
-  rpc AddInterfaces(InterfacesJson) returns (MessageHubResult){}
+  rpc AddInterfaces(InterfacesJson) returns (google.protobuf.Empty){}
   /* This function should be used to remove one or more interfaces from an instance of the Astarte message hub. */
-  rpc RemoveInterfaces(InterfacesName) returns (MessageHubResult){}
-}
-
-/* MessageHubResult is a type of message for returning and propagating errors.
- * It is an enum with the variants, Empty(()), representing success and containing an empty value,
- * and MessageHubError(E) representing error and containing an error value.
- */
-message MessageHubResult{
-  oneof result {
-    google.protobuf.Empty empty_message = 1;  // A message that contains an empty value for success response.
-    MessageHubError error = 2;                // A message that contains a specific Astarte Message Hub error.
-  }
+  rpc RemoveInterfaces(InterfacesName) returns (google.protobuf.Empty){}
 }

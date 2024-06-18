@@ -24,13 +24,6 @@ package astarteplatform.msghub;
 
 /* MessageHub error type */
 message MessageHubError{
-  // A list specifying general categories of Astarte Message Hub error.
-  enum ErrorCode{
-    UNAUTHORIZED = 0;         // Node unauthorized to attach to the Message Hub server.
-    INVALID_DATA = 1;         // Error occurred when trying to send an invalid data.
-    ASTARTE_SDK_ERROR = 2;    // Error returned by the Astarte SDK.
-  }
-
-  ErrorCode code = 1;     // Error enum value.
-  string description = 2; // Human-readable string describing the error.
+  string description = 1;     // Human-readable string describing the error.
+  repeated string source = 2; // A list specifying general categories of Astarte Message Hub error.
 }

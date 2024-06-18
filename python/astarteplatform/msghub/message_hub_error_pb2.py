@@ -14,15 +14,13 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n.astarteplatform/msghub/message_hub_error.proto\x12\x16\x61starteplatform.msghub\"\xaf\x01\n\x0fMessageHubError\x12?\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x31.astarteplatform.msghub.MessageHubError.ErrorCode\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\"F\n\tErrorCode\x12\x10\n\x0cUNAUTHORIZED\x10\x00\x12\x10\n\x0cINVALID_DATA\x10\x01\x12\x15\n\x11\x41STARTE_SDK_ERROR\x10\x02\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n.astarteplatform/msghub/message_hub_error.proto\x12\x16\x61starteplatform.msghub\"6\n\x0fMessageHubError\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x0e\n\x06source\x18\x02 \x03(\tb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'astarteplatform.msghub.message_hub_error_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_MESSAGEHUBERROR']._serialized_start=75
-  _globals['_MESSAGEHUBERROR']._serialized_end=250
-  _globals['_MESSAGEHUBERROR_ERRORCODE']._serialized_start=180
-  _globals['_MESSAGEHUBERROR_ERRORCODE']._serialized_end=250
+  _globals['_MESSAGEHUBERROR']._serialized_start=74
+  _globals['_MESSAGEHUBERROR']._serialized_end=128
 # @@protoc_insertion_point(module_scope)

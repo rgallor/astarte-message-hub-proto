@@ -24,7 +24,6 @@
 //! folder.
 
 use self::{astarte_data_type::Data, astarte_message::Payload};
-use pbjson_types::Empty;
 use serde::Serialize;
 use uuid::Uuid;
 
@@ -265,45 +264,31 @@ impl InterfacesName {
     }
 }
 
-impl From<AstarteMessage> for AstarteMessageResult {
+impl From<AstarteMessage> for MessageHubEvent {
     fn from(value: AstarteMessage) -> Self {
         Self {
-            result: Some(astarte_message_result::Result::Message(value)),
+            event: Some(message_hub_event::Event::Message(value)),
         }
     }
 }
 
-impl AstarteMessageResult {
+impl MessageHubEvent {
     pub fn take_message(self) -> Option<AstarteMessage> {
-        self.result.and_then(|r| match r {
-            astarte_message_result::Result::Message(msg) => Some(msg),
-            astarte_message_result::Result::Error(_) => None,
+        self.event.and_then(|r| match r {
+            message_hub_event::Event::Message(msg) => Some(msg),
+            message_hub_event::Event::Error(_) => None,
         })
     }
 }
 
-impl MessageHubResult {
-    pub fn empty() -> Self {
-        Self {
-            result: Some(message_hub_result::Result::EmptyMessage(Empty {})),
-        }
-    }
-
-    pub fn error(err: MessageHubError) -> Self {
-        Self {
-            result: Some(message_hub_result::Result::Error(err)),
-        }
-    }
-}
-
 impl MessageHubError {
-    pub fn error<S>(code: message_hub_error::ErrorCode, description: S) -> Self
+    pub fn error<S>(description: S, source: Vec<String>) -> Self
     where
         S: Into<String>,
     {
         Self {
-            code: code as i32,
             description: description.into(),
+            source,
         }
     }
 }

@@ -139,74 +139,28 @@ pub mod astarte_data_type {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MessageHubError {
-    /// Error enum value.
-    #[prost(enumeration = "message_hub_error::ErrorCode", tag = "1")]
-    pub code: i32,
     /// Human-readable string describing the error.
-    #[prost(string, tag = "2")]
+    #[prost(string, tag = "1")]
     pub description: ::prost::alloc::string::String,
-}
-/// Nested message and enum types in `MessageHubError`.
-pub mod message_hub_error {
     /// A list specifying general categories of Astarte Message Hub error.
-    #[derive(
-        Clone,
-        Copy,
-        Debug,
-        PartialEq,
-        Eq,
-        Hash,
-        PartialOrd,
-        Ord,
-        ::prost::Enumeration
-    )]
-    #[repr(i32)]
-    pub enum ErrorCode {
-        /// Node unauthorized to attach to the Message Hub server.
-        Unauthorized = 0,
-        /// Error occurred when trying to send an invalid data.
-        InvalidData = 1,
-        /// Error returned by the Astarte SDK.
-        AstarteSdkError = 2,
-    }
-    impl ErrorCode {
-        /// String value of the enum field names used in the ProtoBuf definition.
-        ///
-        /// The values are not transformed in any way and thus are considered stable
-        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-        pub fn as_str_name(&self) -> &'static str {
-            match self {
-                ErrorCode::Unauthorized => "UNAUTHORIZED",
-                ErrorCode::InvalidData => "INVALID_DATA",
-                ErrorCode::AstarteSdkError => "ASTARTE_SDK_ERROR",
-            }
-        }
-        /// Creates an enum from field names used in the ProtoBuf definition.
-        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-            match value {
-                "UNAUTHORIZED" => Some(Self::Unauthorized),
-                "INVALID_DATA" => Some(Self::InvalidData),
-                "ASTARTE_SDK_ERROR" => Some(Self::AstarteSdkError),
-                _ => None,
-            }
-        }
-    }
+    #[prost(string, repeated, tag = "2")]
+    pub source: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-/// AstarteMessageResult is a type of message for returning and propagating errors.
+/// MessageHubEvent is a type of message for returning and propagating errors.
 /// It is an enum with the variants, AstarteMessage(message), representing success and
 /// containing an astarte message value, and MessageHubError(E) representing error and
 /// containing an error value.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AstarteMessageResult {
-    #[prost(oneof = "astarte_message_result::Result", tags = "1, 2")]
-    pub result: ::core::option::Option<astarte_message_result::Result>,
+pub struct MessageHubEvent {
+    #[prost(oneof = "message_hub_event::Event", tags = "1, 2")]
+    pub event: ::core::option::Option<message_hub_event::Event>,
 }
-/// Nested message and enum types in `AstarteMessageResult`.
-pub mod astarte_message_result {
+/// Nested message and enum types in `MessageHubEvent`.
+pub mod message_hub_event {
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Result {
+    pub enum Event {
         /// A message that contains data sent from Astarte.
         #[prost(message, tag = "1")]
         Message(super::AstarteMessage),
@@ -276,28 +230,6 @@ pub struct InterfacesName {
     /// An array of interfaces' names
     #[prost(string, repeated, tag = "1")]
     pub names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-/// MessageHubResult is a type of message for returning and propagating errors.
-/// It is an enum with the variants, Empty(()), representing success and containing an empty value,
-/// and MessageHubError(E) representing error and containing an error value.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MessageHubResult {
-    #[prost(oneof = "message_hub_result::Result", tags = "1, 2")]
-    pub result: ::core::option::Option<message_hub_result::Result>,
-}
-/// Nested message and enum types in `MessageHubResult`.
-pub mod message_hub_result {
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Result {
-        /// A message that contains an empty value for success response.
-        #[prost(message, tag = "1")]
-        EmptyMessage(::pbjson_types::Empty),
-        /// A message that contains a specific Astarte Message Hub error.
-        #[prost(message, tag = "2")]
-        Error(super::MessageHubError),
-    }
 }
 /// Generated client implementations.
 pub mod message_hub_client {
@@ -390,7 +322,7 @@ pub mod message_hub_client {
             &mut self,
             request: impl tonic::IntoRequest<super::Node>,
         ) -> std::result::Result<
-            tonic::Response<tonic::codec::Streaming<super::AstarteMessageResult>>,
+            tonic::Response<tonic::codec::Streaming<super::MessageHubEvent>>,
             tonic::Status,
         > {
             self.inner
@@ -415,10 +347,7 @@ pub mod message_hub_client {
         pub async fn send(
             &mut self,
             request: impl tonic::IntoRequest<super::AstarteMessage>,
-        ) -> std::result::Result<
-            tonic::Response<super::MessageHubResult>,
-            tonic::Status,
-        > {
+        ) -> std::result::Result<tonic::Response<::pbjson_types::Empty>, tonic::Status> {
             self.inner
                 .ready()
                 .await
@@ -441,10 +370,7 @@ pub mod message_hub_client {
         pub async fn detach(
             &mut self,
             request: impl tonic::IntoRequest<::pbjson_types::Empty>,
-        ) -> std::result::Result<
-            tonic::Response<super::MessageHubResult>,
-            tonic::Status,
-        > {
+        ) -> std::result::Result<tonic::Response<::pbjson_types::Empty>, tonic::Status> {
             self.inner
                 .ready()
                 .await
@@ -467,10 +393,7 @@ pub mod message_hub_client {
         pub async fn add_interfaces(
             &mut self,
             request: impl tonic::IntoRequest<super::InterfacesJson>,
-        ) -> std::result::Result<
-            tonic::Response<super::MessageHubResult>,
-            tonic::Status,
-        > {
+        ) -> std::result::Result<tonic::Response<::pbjson_types::Empty>, tonic::Status> {
             self.inner
                 .ready()
                 .await
@@ -495,10 +418,7 @@ pub mod message_hub_client {
         pub async fn remove_interfaces(
             &mut self,
             request: impl tonic::IntoRequest<super::InterfacesName>,
-        ) -> std::result::Result<
-            tonic::Response<super::MessageHubResult>,
-            tonic::Status,
-        > {
+        ) -> std::result::Result<tonic::Response<::pbjson_types::Empty>, tonic::Status> {
             self.inner
                 .ready()
                 .await
@@ -533,7 +453,7 @@ pub mod message_hub_server {
     pub trait MessageHub: Send + Sync + 'static {
         /// Server streaming response type for the Attach method.
         type AttachStream: tonic::codegen::tokio_stream::Stream<
-                Item = std::result::Result<super::AstarteMessageResult, tonic::Status>,
+                Item = std::result::Result<super::MessageHubEvent, tonic::Status>,
             >
             + Send
             + 'static;
@@ -547,34 +467,22 @@ pub mod message_hub_server {
         async fn send(
             &self,
             request: tonic::Request<super::AstarteMessage>,
-        ) -> std::result::Result<
-            tonic::Response<super::MessageHubResult>,
-            tonic::Status,
-        >;
+        ) -> std::result::Result<tonic::Response<::pbjson_types::Empty>, tonic::Status>;
         /// This function should be used to detach a node from an instance of the Astarte message hub.
         async fn detach(
             &self,
             request: tonic::Request<::pbjson_types::Empty>,
-        ) -> std::result::Result<
-            tonic::Response<super::MessageHubResult>,
-            tonic::Status,
-        >;
+        ) -> std::result::Result<tonic::Response<::pbjson_types::Empty>, tonic::Status>;
         /// This function should be used to add one or more interfaces to an instance of the Astarte message hub.
         async fn add_interfaces(
             &self,
             request: tonic::Request<super::InterfacesJson>,
-        ) -> std::result::Result<
-            tonic::Response<super::MessageHubResult>,
-            tonic::Status,
-        >;
+        ) -> std::result::Result<tonic::Response<::pbjson_types::Empty>, tonic::Status>;
         /// This function should be used to remove one or more interfaces from an instance of the Astarte message hub.
         async fn remove_interfaces(
             &self,
             request: tonic::Request<super::InterfacesName>,
-        ) -> std::result::Result<
-            tonic::Response<super::MessageHubResult>,
-            tonic::Status,
-        >;
+        ) -> std::result::Result<tonic::Response<::pbjson_types::Empty>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct MessageHubServer<T: MessageHub> {
@@ -662,7 +570,7 @@ pub mod message_hub_server {
                         T: MessageHub,
                     > tonic::server::ServerStreamingService<super::Node>
                     for AttachSvc<T> {
-                        type Response = super::AstarteMessageResult;
+                        type Response = super::MessageHubEvent;
                         type ResponseStream = T::AttachStream;
                         type Future = BoxFuture<
                             tonic::Response<Self::ResponseStream>,
@@ -708,7 +616,7 @@ pub mod message_hub_server {
                     impl<
                         T: MessageHub,
                     > tonic::server::UnaryService<super::AstarteMessage> for SendSvc<T> {
-                        type Response = super::MessageHubResult;
+                        type Response = ::pbjson_types::Empty;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -754,7 +662,7 @@ pub mod message_hub_server {
                         T: MessageHub,
                     > tonic::server::UnaryService<::pbjson_types::Empty>
                     for DetachSvc<T> {
-                        type Response = super::MessageHubResult;
+                        type Response = ::pbjson_types::Empty;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -800,7 +708,7 @@ pub mod message_hub_server {
                         T: MessageHub,
                     > tonic::server::UnaryService<super::InterfacesJson>
                     for AddInterfacesSvc<T> {
-                        type Response = super::MessageHubResult;
+                        type Response = ::pbjson_types::Empty;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -846,7 +754,7 @@ pub mod message_hub_server {
                         T: MessageHub,
                     > tonic::server::UnaryService<super::InterfacesName>
                     for RemoveInterfacesSvc<T> {
-                        type Response = super::MessageHubResult;
+                        type Response = ::pbjson_types::Empty;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
