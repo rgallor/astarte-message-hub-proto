@@ -279,16 +279,38 @@ impl MessageHubEvent {
             message_hub_event::Event::Error(_) => None,
         })
     }
+
+    pub fn from_error(error: &dyn std::error::Error) -> Self {
+        Self {
+            event: Some(message_hub_event::Event::Error(MessageHubError::from_error(error))),
+        }
+    }
 }
 
 impl MessageHubError {
-    pub fn error<S>(description: S, source: Vec<String>) -> Self
+    pub fn new<S>(description: S, source: Vec<String>) -> Self
     where
         S: Into<String>,
     {
         Self {
             description: description.into(),
             source,
+        }
+    }
+
+    pub fn from_error(error: &dyn std::error::Error) -> Self {
+        let description = error.to_string();
+        let mut source_vec = vec![];
+
+        let mut cause = error;
+        while let Some(source) = cause.source() {
+            cause = source;
+            source_vec.push(source.to_string());
+        }
+
+        Self {
+            description,
+            source: source_vec,
         }
     }
 }
