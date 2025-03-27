@@ -24,7 +24,7 @@ use chrono::{DateTime, Utc};
 
 use crate::{
     proto_message_hub::astarte_data::AstarteData, AstarteDatastreamInidividual,
-    AstarteDatastreamObject, AstarteDateTimeArray,
+    AstarteDatastreamObject, AstarteDateTimeArray, AstartePropertyIndividual,
 };
 
 /// This macro can be used to implement the from trait for an AstarteDataTypeIndividual from a
@@ -129,6 +129,19 @@ impl From<HashMap<String, AstarteData>> for AstarteDatastreamObject {
 impl From<HashMap<String, crate::AstarteData>> for AstarteDatastreamObject {
     fn from(value: HashMap<String, crate::AstarteData>) -> Self {
         AstarteDatastreamObject { data: value }
+    }
+}
+
+impl<T> From<T> for AstartePropertyIndividual
+where
+    T: Into<AstarteData>,
+{
+    fn from(value: T) -> Self {
+        Self {
+            data: Some(crate::proto_message_hub::AstarteData {
+                astarte_data: Some(value.into()),
+            }),
+        }
     }
 }
 
