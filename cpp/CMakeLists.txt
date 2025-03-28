@@ -7,18 +7,49 @@ cmake_minimum_required(VERSION 3.15)
 # Project
 project(astarte-msg-hub-proto)
 
-# Protobuf
-set(protobuf_MODULE_COMPATIBLE TRUE)
-find_package(Protobuf CONFIG REQUIRED)
-message(STATUS "Using protobuf ${protobuf_VERSION}")
+include(FetchContent)
 
-# Protobuf-compiler
-set(_PROTOBUF_PROTOC $<TARGET_FILE:protobuf::protoc>)
+option(USE_SYSTEM_GRPC "Use system installed gRPC" OFF)
+if(USE_SYSTEM_GRPC)
+  # Protobuf
+  set(protobuf_MODULE_COMPATIBLE TRUE)
+  find_package(Protobuf CONFIG REQUIRED)
+  message(STATUS "Using protobuf ${protobuf_VERSION}")
+  set(_PROTOBUF_PROTOC $<TARGET_FILE:protobuf::protoc>)
 
-# gRPC
-find_package(gRPC CONFIG REQUIRED)
-message(STATUS "Using gRPC ${gRPC_VERSION}")
-set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
+  # gRPC
+  find_package(gRPC CONFIG REQUIRED)
+  message(STATUS "Using gRPC ${gRPC_VERSION}")
+  set(_GRPC_GRPCPP gRPC::grpc++)
+  set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
+else()
+  if(MSVC)
+    add_definitions(-D_WIN32_WINNT=0x600)
+  endif()
+
+  find_package(Threads REQUIRED)
+
+  set(ABSL_ENABLE_INSTALL ON)
+  set(ABSL_PROPAGATE_CXX_STD ON)
+
+  message(STATUS "Using gRPC via add_subdirectory (FetchContent).")
+  FetchContent_Declare(
+    grpc
+    GIT_REPOSITORY https://github.com/grpc/grpc.git
+    GIT_TAG        v1.69.0
+    GIT_SHALLOW    TRUE
+    GIT_PROGRESS   TRUE
+    GIT_SUBMODULES_RECURSE TRUE)
+  FetchContent_MakeAvailable(grpc)
+
+  # Since FetchContent uses add_subdirectory under the hood, we can use
+  # the grpc targets directly from this build.
+  set(_PROTOBUF_LIBPROTOBUF libprotobuf)
+  set(_REFLECTION grpc++_reflection)
+  set(_PROTOBUF_PROTOC $<TARGET_FILE:protoc>)
+  set(_GRPC_GRPCPP grpc++)
+  set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:grpc_cpp_plugin>)
+endif()
 
 # Output directory
 if(NOT DEFINED OUT_FOLDER)
